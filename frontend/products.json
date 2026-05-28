@@ -1,5 +1,16 @@
 {
-  "categories": ["All", "Produce", "Dairy", "Pantry", "Beverages", "Frozen", "Bakery"],
+  "categories": [
+    { "id": "All", "name": "All Products", "emoji": "🏪" },
+    { "id": "Produce", "name": "Produce", "emoji": "🥬" },
+    { "id": "Dairy", "name": "Dairy", "emoji": "🥛" },
+    { "id": "Pantry", "name": "Pantry", "emoji": "🥫" },
+    { "id": "Beverages", "name": "Beverages", "emoji": "🥤" },
+    { "id": "Frozen", "name": "Frozen", "emoji": "🧊" },
+    { "id": "Bakery", "name": "Bakery", "emoji": "🍞" },
+    { "id": "Mushrooms", "name": "Mushrooms", "emoji": "🍄" },
+    { "id": "Seafood", "name": "Seafood", "emoji": "🐟" },
+    { "id": "Eggs", "name": "Eggs", "emoji": "🥚" }
+  ],
   "products": [
     {
       "id": 1,
@@ -8,7 +19,7 @@
       "description": "Sweet, vine-ripened organic Roma tomatoes, perfect for salads and sauces.",
       "price": 4.99,
       "originalPrice": 6.49,
-      "image": "https://images.unsplash.com/photo-1595855759920-86582396756a?auto=format&fit=crop&w=600&q=80",
+      "image": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=600&q=80",
       "rating": 4.7,
       "inStock": true
     },
@@ -274,6 +285,72 @@
       "originalPrice": null,
       "image": "https://images.unsplash.com/photo-1517881917430-e70dfb3610aa?auto=format&fit=crop&w=600&q=80",
       "rating": 4.5,
+      "inStock": true
+    },
+    {
+      "id": 26,
+      "name": "Fresh Button Mushrooms",
+      "category": "Mushrooms",
+      "description": "Fresh, tender white button mushrooms sourced from local organic growers.",
+      "price": 3.49,
+      "originalPrice": 4.29,
+      "image": "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.8,
+      "inStock": true
+    },
+    {
+      "id": 27,
+      "name": "Premium Shiitake Mushrooms",
+      "category": "Mushrooms",
+      "description": "Flavorful, rich shiitake mushrooms, ideal for stir-fries and soups.",
+      "price": 6.99,
+      "originalPrice": null,
+      "image": "https://images.unsplash.com/photo-1612838320302-4b3b49af37a4?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.7,
+      "inStock": true
+    },
+    {
+      "id": 28,
+      "name": "Fresh Atlantic Salmon Fillet",
+      "category": "Seafood",
+      "description": "Boneless, skin-on fresh Atlantic salmon fillet rich in Omega-3.",
+      "price": 18.99,
+      "originalPrice": 22.99,
+      "image": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.9,
+      "inStock": true
+    },
+    {
+      "id": 29,
+      "name": "Wild Caught Tiger Shrimp",
+      "category": "Seafood",
+      "description": "Raw, peeled and deveined jumbo tiger shrimp wild-caught.",
+      "price": 15.49,
+      "originalPrice": null,
+      "image": "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.6,
+      "inStock": true
+    },
+    {
+      "id": 30,
+      "name": "Free-Range Brown Eggs",
+      "category": "Eggs",
+      "description": "A dozen grade A large brown eggs from pasture-raised, organic-fed hens.",
+      "price": 5.99,
+      "originalPrice": 6.99,
+      "image": "https://images.unsplash.com/photo-1516448620398-c5f44bf9f441?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.9,
+      "inStock": true
+    },
+    {
+      "id": 31,
+      "name": "Organic Farm Fresh White Eggs",
+      "category": "Eggs",
+      "description": "Cage-free, farm fresh white eggs packed with pure clean nutrition.",
+      "price": 4.49,
+      "originalPrice": null,
+      "image": "https://images.unsplash.com/photo-1506976785307-8732e854ad03?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.7,
       "inStock": true
     }
   ]

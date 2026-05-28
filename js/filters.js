@@ -1,203 +1,198 @@
 /**
- * FreshMarket Products Filtering & Search Logic
+ * Farm Fresh Products Filtering & Search Logic
  */
 
 const ProductFilters = {
   state: {
     category: 'all',
-    minPrice: 0,
-    maxPrice: 1500,
-    organic: false,
-    local: false,
-    inStock: false,
-    rating: 0,
     search: ''
   },
 
   init() {
     this.cacheElements();
     this.bindEvents();
-    this.resetSliders();
   },
 
   cacheElements() {
-    this.priceMinInput = document.getElementById('priceMin');
-    this.priceMaxInput = document.getElementById('priceMax');
-    this.minPriceDisplay = document.getElementById('minPriceDisplay');
-    this.maxPriceDisplay = document.getElementById('maxPriceDisplay');
-    
-    this.organicCheck = document.getElementById('organicFilter');
-    this.localCheck = document.getElementById('localFilter');
-    this.stockCheck = document.getElementById('stockFilter');
-    this.ratingSelect = document.getElementById('ratingFilter');
-    this.resetBtn = document.getElementById('resetFiltersBtn');
-    
     this.searchInput = document.getElementById('searchInput');
     this.searchBtn = document.getElementById('searchBtn');
-    this.grid = document.getElementById('productsGrid');
+    this.searchCategorySelect = document.getElementById('searchCategorySelect');
   },
 
   bindEvents() {
-    // Sliders
-    this.priceMinInput.addEventListener('input', (e) => {
-      let val = parseInt(e.target.value);
-      if (val >= parseInt(this.priceMaxInput.value)) {
-        val = parseInt(this.priceMaxInput.value) - 10;
-        e.target.value = val;
-      }
-      this.state.minPrice = val;
-      this.minPriceDisplay.textContent = `₹${val}`;
-      this.debouncedFilter();
-    });
-
-    this.priceMaxInput.addEventListener('input', (e) => {
-      let val = parseInt(e.target.value);
-      if (val <= parseInt(this.priceMinInput.value)) {
-        val = parseInt(this.priceMinInput.value) + 10;
-        e.target.value = val;
-      }
-      this.state.maxPrice = val;
-      this.maxPriceDisplay.textContent = `₹${val}`;
-      this.debouncedFilter();
-    });
-
-    // Checkboxes
-    this.organicCheck.addEventListener('change', (e) => {
-      this.state.organic = e.target.checked;
-      this.applyFilters();
-    });
-
-    this.localCheck.addEventListener('change', (e) => {
-      this.state.local = e.target.checked;
-      this.applyFilters();
-    });
-
-    this.stockCheck.addEventListener('change', (e) => {
-      this.state.inStock = e.target.checked;
-      this.applyFilters();
-    });
-
-    // Dropdown
-    this.ratingSelect.addEventListener('change', (e) => {
-      this.state.rating = parseFloat(e.target.value);
-      this.applyFilters();
-    });
-
-    // Reset button
-    this.resetBtn.addEventListener('click', () => this.clearFilters());
-
-    // Live search input
+    // Search input
     let searchTimeout;
-    this.searchInput.addEventListener('input', (e) => {
-      clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(() => {
-        this.state.search = e.target.value.trim();
+    if (this.searchInput) {
+      this.searchInput.addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+          this.state.search = e.target.value.trim();
+          this.applyFilters();
+        }, 300);
+      });
+
+      // Press Enter to search immediately
+      this.searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          clearTimeout(searchTimeout);
+          this.state.search = this.searchInput.value.trim();
+          this.applyFilters();
+        }
+      });
+    }
+
+    if (this.searchBtn) {
+      this.searchBtn.addEventListener('click', () => {
+        if (this.searchInput) this.state.search = this.searchInput.value.trim();
         this.applyFilters();
-      }, 300);
-    });
+      });
+    }
 
-    this.searchBtn.addEventListener('click', () => {
-      this.state.search = this.searchInput.value.trim();
-      this.applyFilters();
-    });
+    if (this.searchCategorySelect) {
+      this.searchCategorySelect.addEventListener('change', (e) => {
+        this.state.category = e.target.value;
+        this.applyFilters();
+      });
+    }
   },
 
-  resetSliders() {
-    this.state.minPrice = parseInt(this.priceMinInput.value);
-    this.state.maxPrice = parseInt(this.priceMaxInput.value);
-    this.minPriceDisplay.textContent = `₹${this.state.minPrice}`;
-    this.maxPriceDisplay.textContent = `₹${this.state.maxPrice}`;
-  },
-
-  /**
-   * Set category and filter
-   */
   setCategory(catId) {
     this.state.category = catId;
+    
+    // Sync header dropdown if exists
+    if (this.searchCategorySelect) {
+      this.searchCategorySelect.value = catId;
+    }
+    
+    // Sync featured tabs
+    document.querySelectorAll('.featured-tab').forEach(tab => {
+      if (tab.dataset.category === catId) {
+        tab.classList.add('active');
+      } else {
+        tab.classList.remove('active');
+      }
+    });
+
+    // Highlight category card item
+    document.querySelectorAll('.category-card-item').forEach(card => {
+      if (card.dataset.id === catId) {
+        card.classList.add('active');
+      } else {
+        card.classList.remove('active');
+      }
+    });
+
     this.applyFilters();
   },
 
-  /**
-   * Apply filters through fetching backend api/filter.php
-   */
   async applyFilters() {
-    window.UIAnimations.renderSkeletons(this.grid);
+    const grid = document.getElementById('featuredGrid');
+    if (!grid) return;
+
+    window.UIAnimations.renderSkeletons(grid);
 
     const queryParams = new URLSearchParams({
       category: this.state.category,
-      min_price: this.state.minPrice,
-      max_price: this.state.maxPrice,
-      organic: this.state.organic,
-      local: this.state.local,
-      in_stock: this.state.inStock,
-      rating: this.state.rating,
-      search: this.state.search
+      search: this.state.search,
+      min_price: 0,
+      max_price: 1500,
+      organic: false,
+      local: false,
+      in_stock: false,
+      rating: 0
     });
 
     try {
-      const response = await fetch(`api/filter.php?${queryParams.toString()}`);
-      if (!response.ok) throw new Error("Filter request failed");
-      
-      const filteredProducts = await response.json();
-      
-      // Update global store state and redraw
-      window.FreshMarketApp.updateProductList(filteredProducts);
+      let filteredProducts = null;
+
+      // 1. Try to fetch from the server if running over HTTP/HTTPS
+      if (window.location.protocol.startsWith('http')) {
+        try {
+          const response = await fetch(`api/filter.php?${queryParams.toString()}`);
+          if (response.ok) {
+            filteredProducts = await response.json();
+          }
+        } catch (err) {
+          console.warn("API filtering failed, falling back to client-side filtering:", err);
+        }
+      }
+
+      // 2. Client-side filtering fallback (highly robust for static setups)
+      if (!filteredProducts) {
+        const allProducts = window.FreshMarketApp ? window.FreshMarketApp.products : [];
+        filteredProducts = allProducts.filter(p => {
+          // Category match
+          if (this.state.category !== 'all' && p.category.toLowerCase() !== this.state.category.toLowerCase()) {
+            return false;
+          }
+          // Search match
+          if (this.state.search) {
+            const query = this.state.search.toLowerCase();
+            const isDairyQuery = query.includes('diary') || query.includes('dairy');
+            const isVegetableQuery = query.includes('vegetable');
+            const nameMatch = p.name.toLowerCase().includes(query);
+            const descMatch = p.description.toLowerCase().includes(query);
+            const tagMatch = p.tags && p.tags.some(t => t.toLowerCase().includes(query));
+            const categoryMatch = p.category.toLowerCase().includes(query) || 
+                                  (isDairyQuery && p.category.toLowerCase() === 'dairy') ||
+                                  (isVegetableQuery && p.category.toLowerCase() === 'produce');
+            if (!nameMatch && !descMatch && !tagMatch && !categoryMatch) return false;
+          }
+          return true;
+        });
+      }
+
+      // Update heading dynamically
+      const heading = document.querySelector('.featured-section h2');
+      if (heading) {
+        if (this.state.search) {
+          heading.textContent = `Search Results for "${this.state.search}"`;
+        } else if (this.state.category !== 'all') {
+          const categoryName = this.state.category.charAt(0).toUpperCase() + this.state.category.slice(1);
+          heading.textContent = `Featured ${categoryName}`;
+        } else {
+          heading.textContent = "Featured Product";
+        }
+      }
+
+      // Render to featured grid
+      if (window.FreshMarketApp) {
+        window.FreshMarketApp.renderProductsToGrid(filteredProducts, grid);
+      }
     } catch(err) {
       console.error(err);
       window.UIAnimations.showToast("Could not load products. Please check connection.", "error");
     }
   },
 
-  /**
-   * Clears state and controls
-   */
   clearFilters() {
     this.state = {
       category: 'all',
-      minPrice: 0,
-      maxPrice: 1500,
-      organic: false,
-      local: false,
-      inStock: false,
-      rating: 0,
       search: ''
     };
+    if (this.searchInput) this.searchInput.value = '';
+    if (this.searchCategorySelect) this.searchCategorySelect.value = 'all';
 
-    // Reset UI Inputs
-    this.priceMinInput.value = 0;
-    this.priceMaxInput.value = 1500;
-    this.minPriceDisplay.textContent = '₹0';
-    this.maxPriceDisplay.textContent = '₹1500';
-    
-    this.organicCheck.checked = false;
-    this.localCheck.checked = false;
-    this.stockCheck.checked = false;
-    this.ratingSelect.value = '0';
-    this.searchInput.value = '';
-
-    // Reset Active tab
-    document.querySelectorAll('.category-btn').forEach(btn => {
-      if (btn.dataset.id === 'all') {
-        btn.classList.add('active');
+    // Reset active tabs
+    document.querySelectorAll('.featured-tab').forEach(tab => {
+      if (tab.dataset.category === 'all') {
+        tab.classList.add('active');
       } else {
-        btn.classList.remove('active');
+        tab.classList.remove('active');
+      }
+    });
+
+    // Reset category card item
+    document.querySelectorAll('.category-card-item').forEach(card => {
+      if (card.dataset.id === 'all') {
+        card.classList.add('active');
+      } else {
+        card.classList.remove('active');
       }
     });
 
     this.applyFilters();
-    window.UIAnimations.showToast("All filters cleared successfully", "info");
-  },
-
-  /**
-   * Debounces fast price adjustments
-   */
-  debouncedFilter() {
-    clearTimeout(this.filterTimeout);
-    this.filterTimeout = setTimeout(() => {
-      this.applyFilters();
-    }, 250);
   }
 };
 
-// Export
 window.ProductFilters = ProductFilters;

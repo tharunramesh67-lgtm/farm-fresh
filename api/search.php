@@ -11,8 +11,13 @@ if (strlen($query) < 1) {
 
 $results = array_filter($products, function($p) use ($query) {
     $searchString = strtolower($query);
+    $isDairyQuery = (strpos($searchString, 'diary') !== false) || (strpos($searchString, 'dairy') !== false);
+    $isVegetableQuery = (strpos($searchString, 'vegetable') !== false);
     $nameMatch = strpos(strtolower($p['name']), $searchString) !== false;
     $descMatch = strpos(strtolower($p['description']), $searchString) !== false;
+    $categoryMatch = (strpos(strtolower($p['category']), $searchString) !== false) || 
+                      ($isDairyQuery && strcasecmp($p['category'], 'dairy') === 0) ||
+                      ($isVegetableQuery && strcasecmp($p['category'], 'produce') === 0);
     
     $tagMatch = false;
     if (isset($p['tags']) && is_array($p['tags'])) {
@@ -24,7 +29,7 @@ $results = array_filter($products, function($p) use ($query) {
         }
     }
     
-    return $nameMatch || $descMatch || $tagMatch;
+    return $nameMatch || $descMatch || $tagMatch || $categoryMatch;
 });
 
 json_response(array_values($results));

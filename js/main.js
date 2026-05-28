@@ -1,5 +1,5 @@
 /**
- * FreshMarket Application Main Entrypoint
+ * Farm Fresh Application Main Entrypoint
  */
 
 const FreshMarketApp = {
@@ -17,20 +17,22 @@ const FreshMarketApp = {
     window.CartManager.init();
 
     // Initial render
-    this.renderCategories();
-    this.renderProducts();
+    this.renderCategoriesMenu();
+    this.renderCategoryCards();
+    this.renderBestsellers();
+    this.renderFeaturedProducts('all');
+    this.initHeroSlider();
+    this.initBestsellerCarousel();
   },
 
   cacheElements() {
-    this.categoryTabs = document.getElementById('categoryTabs');
-    this.productsGrid = document.getElementById('productsGrid');
-    this.resultsCount = document.getElementById('resultsCount');
-    this.totalCount = document.getElementById('totalCount');
-    
-    // Mobile Filters
-    this.mobileFilterBtn = document.getElementById('mobileFilterBtn');
-    this.closeFiltersBtn = document.getElementById('closeFiltersBtn');
-    this.filterSidebar = document.getElementById('filterSidebar');
+    // New premium elements
+    this.navCategoriesMenu = document.getElementById('navCategoriesMenu');
+    this.categoriesGridCards = document.getElementById('categoriesGridCards');
+    this.bestsellerGrid = document.getElementById('bestsellerGrid');
+    this.featuredGrid = document.getElementById('featuredGrid');
+    this.featuredTabs = document.getElementById('featuredTabs');
+    this.searchCategorySelect = document.getElementById('searchCategorySelect');
   },
 
   loadBootstrapData() {
@@ -44,68 +46,111 @@ const FreshMarketApp = {
   },
 
   bindEvents() {
-    // Mobile filters drawer open/close
-    this.mobileFilterBtn.addEventListener('click', () => {
-      this.filterSidebar.classList.add('open');
-    });
-
-    this.closeFiltersBtn.addEventListener('click', () => {
-      this.filterSidebar.classList.remove('open');
-    });
-
-    // Reset filters action close sidebar on mobile
-    document.getElementById('resetFiltersBtn').addEventListener('click', () => {
-      this.filterSidebar.classList.remove('open');
-    });
-
     // Logo click reset
-    document.getElementById('logoLink').addEventListener('click', (e) => {
-      e.preventDefault();
-      window.ProductFilters.clearFilters();
-    });
+    const logoLink = document.getElementById('logoLink');
+    if (logoLink) {
+      logoLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.ProductFilters.clearFilters();
+      });
+    }
+
+    // Search Category dropdown sync
+    if (this.searchCategorySelect) {
+      this.searchCategorySelect.addEventListener('change', (e) => {
+        window.ProductFilters.setCategory(e.target.value);
+      });
+    }
+
+    // Featured Tabs filtering
+    if (this.featuredTabs) {
+      this.featuredTabs.querySelectorAll('.featured-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          this.featuredTabs.querySelectorAll('.featured-tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          window.ProductFilters.setCategory(tab.dataset.category);
+        });
+      });
+    }
   },
 
-  renderCategories() {
-    this.categoryTabs.innerHTML = '';
+  renderCategoriesMenu() {
+    if (!this.navCategoriesMenu) return;
+    this.navCategoriesMenu.innerHTML = '';
     
     this.categories.forEach(cat => {
-      const btn = document.createElement('button');
-      btn.className = `category-btn ${cat.id === 'all' ? 'active' : ''}`;
-      btn.dataset.id = cat.id;
-      
-      const emojiSpan = cat.emoji ? `<span>${cat.emoji}</span>` : '';
-      btn.innerHTML = `${emojiSpan} ${cat.name}`;
-
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+      if (cat.id === 'all') return;
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = '#featuredGrid';
+      a.innerHTML = `${cat.emoji || '📦'} ${cat.name}`;
+      a.addEventListener('click', (e) => {
         window.ProductFilters.setCategory(cat.id);
-        
-        // Close sidebar if mobile
-        this.filterSidebar.classList.remove('open');
       });
-
-      this.categoryTabs.appendChild(btn);
+      li.appendChild(a);
+      this.navCategoriesMenu.appendChild(li);
     });
   },
 
-  /**
-   * Renders the product catalog based on state list
-   */
-  renderProducts(productsToRender = this.products) {
-    this.productsGrid.innerHTML = '';
-    
-    // Update counters
-    this.resultsCount.textContent = productsToRender.length;
-    this.totalCount.textContent = this.products.length;
+  renderCategoryCards() {
+    if (!this.categoriesGridCards) return;
+    this.categoriesGridCards.innerHTML = '';
+
+    this.categories.forEach(cat => {
+      const card = document.createElement('div');
+      card.className = `category-card-item ${cat.id === 'all' ? 'active' : ''}`;
+      card.dataset.id = cat.id;
+      card.innerHTML = `
+        <span class="category-card-emoji">${cat.emoji || '🥬'}</span>
+        <span class="category-card-name">${cat.name}</span>
+      `;
+
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.category-card-item').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        window.ProductFilters.setCategory(cat.id);
+        
+        // Scroll smoothly to featured grid
+        const featured = document.getElementById('featuredGrid');
+        if (featured) featured.scrollIntoView({ behavior: 'smooth' });
+      });
+
+      this.categoriesGridCards.appendChild(card);
+    });
+  },
+
+  renderBestsellers() {
+    if (!this.bestsellerGrid) return;
+    this.bestsellerGrid.innerHTML = '';
+
+    const bestsellers = this.products.filter(p => p.featured || p.originalPrice);
+    const listToRender = bestsellers.length > 0 ? bestsellers : this.products.slice(0, 4);
+
+    listToRender.forEach(product => {
+      const card = this.createProductCard(product);
+      this.bestsellerGrid.appendChild(card);
+    });
+  },
+
+  renderFeaturedProducts(category = 'all') {
+    if (!this.featuredGrid) return;
+    const featured = category === 'all' 
+      ? this.products.slice(0, 4) 
+      : this.products.filter(p => p.category === category).slice(0, 4);
+
+    this.renderProductsToGrid(featured, this.featuredGrid);
+  },
+
+  renderProductsToGrid(productsToRender, grid) {
+    if (!grid) return;
+    grid.innerHTML = '';
 
     if (productsToRender.length === 0) {
-      this.productsGrid.innerHTML = `
-        <div class="empty-shop-state">
-          <span class="empty-icon">🥬</span>
-          <h3>No Groceries Found</h3>
-          <p>We couldn't find any products matching your current filters. Try resetting them or adjusting parameters.</p>
-          <button class="continue-shopping-btn" style="max-width: 200px;" onclick="window.ProductFilters.clearFilters()">Clear Filters</button>
+      grid.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 1rem; color: #64748B;">
+          <span style="font-size: 3.5rem; display: block; margin-bottom: 1rem;">🥬</span>
+          <h3>No Products Found</h3>
+          <p>We couldn't find any products matching those criteria.</p>
         </div>
       `;
       return;
@@ -113,10 +158,10 @@ const FreshMarketApp = {
 
     productsToRender.forEach(product => {
       const card = this.createProductCard(product);
-      this.productsGrid.appendChild(card);
+      grid.appendChild(card);
     });
 
-    window.UIAnimations.animateGridEntrance(this.productsGrid);
+    window.UIAnimations.animateGridEntrance(grid);
   },
 
   createProductCard(product) {
@@ -188,11 +233,57 @@ const FreshMarketApp = {
     return card;
   },
 
-  /**
-   * Called by filter submodule to refresh rendering
-   */
+  initHeroSlider() {
+    const slider = document.getElementById('heroSlider');
+    if (!slider) return;
+
+    const slides = slider.querySelectorAll('.slide');
+    const prevBtn = document.getElementById('heroPrevBtn');
+    const nextBtn = document.getElementById('heroNextBtn');
+    let activeIndex = 0;
+
+    const showSlide = (index) => {
+      slides.forEach(s => s.classList.remove('active'));
+      slides[index].classList.add('active');
+    };
+
+    if (prevBtn && nextBtn) {
+      prevBtn.addEventListener('click', () => {
+        activeIndex = (activeIndex - 1 + slides.length) % slides.length;
+        showSlide(activeIndex);
+      });
+
+      nextBtn.addEventListener('click', () => {
+        activeIndex = (activeIndex + 1) % slides.length;
+        showSlide(activeIndex);
+      });
+    }
+
+    // Auto rotate every 8 seconds
+    setInterval(() => {
+      activeIndex = (activeIndex + 1) % slides.length;
+      showSlide(activeIndex);
+    }, 8000);
+  },
+
+  initBestsellerCarousel() {
+    const prevBtn = document.getElementById('bestPrevBtn');
+    const nextBtn = document.getElementById('bestNextBtn');
+    const grid = this.bestsellerGrid;
+
+    if (prevBtn && nextBtn && grid) {
+      prevBtn.addEventListener('click', () => {
+        grid.scrollBy({ left: -300, behavior: 'smooth' });
+      });
+
+      nextBtn.addEventListener('click', () => {
+        grid.scrollBy({ left: 300, behavior: 'smooth' });
+      });
+    }
+  },
+
   updateProductList(filteredProducts) {
-    this.renderProducts(filteredProducts);
+    this.renderFeaturedProducts('all');
   }
 };
 

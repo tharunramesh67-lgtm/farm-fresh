@@ -27,20 +27,43 @@ $storeDataJson = json_encode($storeData);
 </head>
 <body>
 
-  <!-- Dynamic Header -->
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-container">
+      <div class="top-bar-left">
+        <span>📞 +123 4567 890</span>
+        <span class="separator">|</span>
+        <span>✉️ support@farmfresh.com</span>
+      </div>
+      <div class="top-bar-right">
+        <div class="lang-selector">
+          <span>English</span> <span class="arrow">▼</span>
+        </div>
+        <span class="separator">|</span>
+        <a href="#register" class="register-link">Register</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
   <header class="header">
     <div class="header-container">
       <a href="#" class="logo" id="logoLink">
-        <span class="logo-emoji">🛒</span>
-        <span class="logo-text">FreshMarket</span>
+        <span class="logo-emoji">🥬</span>
+        <span class="logo-text">Farm Fresh</span>
       </a>
 
+      <!-- Redesigned Search bar -->
       <div class="search-bar">
         <input type="text" id="searchInput" placeholder="Search fresh fruits, leafy spinach, paneer, tea...">
-        <button class="search-btn" id="searchBtn">🔍</button>
+        <button class="search-btn" id="searchBtn">Search</button>
       </div>
 
       <div class="header-actions">
+        <a href="#profile" class="action-btn-circle" title="My Account">
+          👤
+        </a>
+
         <button class="action-btn" id="wishlistToggleBtn" title="Wishlist">
           <span class="btn-icon">❤️</span>
           <span class="btn-text">Wishlist</span>
@@ -56,91 +79,265 @@ $storeDataJson = json_encode($storeData);
     </div>
   </header>
 
-  <!-- Hero Banner -->
-  <section class="hero-section">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <span class="hero-tag">🚜 100% Locally Sourced</span>
-      <h1>Vibrant, Fresh Food <br>Straight From Farms to Your Kitchen</h1>
-      <p>Taste the richness of genuine organic produce, creamy pasture-raised dairy, pure ghee, and artisanal bakery bread curated for you.</p>
-      <a href="#shopContainer" class="hero-cta">Shop Fresh Today</a>
-    </div>
-  </section>
-
-  <!-- Categories Horizontal Navigation -->
-  <nav class="categories-nav">
-    <div class="categories-container" id="categoryTabs">
-      <!-- Generated Dynamically -->
+  <!-- Main Navigation Menu -->
+  <nav class="main-navigation">
+    <div class="nav-container">
+      <ul class="nav-menu">
+        <li><a href="#" class="active">Home</a></li>
+        <li class="dropdown">
+          <a href="#shopContainer">Shop <span class="arrow">▼</span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#shopContainer">Fresh Produce</a></li>
+            <li><a href="#shopContainer">Organic Dairy</a></li>
+            <li><a href="#shopContainer">Bakery Specials</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#categories">Categories <span class="arrow">▼</span></a>
+          <ul class="dropdown-menu" id="navCategoriesMenu">
+            <!-- Filled via categories.json -->
+          </ul>
+        </li>
+        <li><a href="#blog">Blog</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
     </div>
   </nav>
 
-  <!-- Main Shop Layout -->
-  <div class="container shop-layout" id="shopContainer">
-
-    <!-- Filters Sidebar -->
-    <aside class="filters-sidebar" id="filterSidebar">
-      <div class="sidebar-header">
-        <h3>Filter & Refine</h3>
-        <button class="close-sidebar-btn" id="closeFiltersBtn">✕</button>
-      </div>
-      
-      <div class="filter-group">
-        <label>Price Range: <span class="price-range-display"><span id="minPriceDisplay">₹0</span> - <span id="maxPriceDisplay">₹1500</span></span></label>
-        <div class="range-sliders">
-          <input type="range" id="priceMin" min="0" max="1500" value="0" step="10" class="filter-slider">
-          <input type="range" id="priceMax" min="0" max="1500" value="1500" step="10" class="filter-slider">
+  <!-- Hero Slider -->
+  <section class="hero-slider" id="heroSlider">
+    <div class="slides-container">
+      <div class="slide active" style="background-color: #FEE2E2;">
+        <div class="slide-content">
+          <span class="hero-tag">🚜 100% Organic & Local</span>
+          <h2>Farm Fresh Organic <br>We Care Always</h2>
+          <p>Hand picked fresh vegetables straight to your doorstep today.</p>
+          <a href="#shopContainer" class="hero-cta">Shop Now</a>
+        </div>
+        <div class="slide-image">
+          <!-- Premium Unsplash Image representing farmer product basket -->
+          <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80" alt="Farm Fresh Basket">
         </div>
       </div>
-      
-      <div class="filter-group checks-group">
-        <label class="checkbox-container">
-          <input type="checkbox" id="organicFilter">
-          <span class="checkmark"></span>
-          🌱 Organic Certified
-        </label>
-        
-        <label class="checkbox-container">
-          <input type="checkbox" id="localFilter">
-          <span class="checkmark"></span>
-          🚜 Locally Sourced
-        </label>
-        
-        <label class="checkbox-container">
-          <input type="checkbox" id="stockFilter">
-          <span class="checkmark"></span>
-          ✓ In Stock Only
-        </label>
-      </div>
-      
-      <div class="filter-group">
-        <label for="ratingFilter">Minimum Rating</label>
-        <select id="ratingFilter" class="filter-select">
-          <option value="0">All Ratings</option>
-          <option value="4.8">★★★★★ 4.8+ Stars</option>
-          <option value="4.5">★★★★☆ 4.5+ Stars</option>
-          <option value="4.0">★★★★☆ 4.0+ Stars</option>
-        </select>
-      </div>
-      
-      <button class="reset-filters-btn" id="resetFiltersBtn">Clear All Filters</button>
-    </aside>
-
-    <!-- Products Content Grid -->
-    <section class="products-section">
-      <div class="results-header">
-        <div class="results-counter">
-          Showing <span id="resultsCount" class="count-highlight">0</span> of <span id="totalCount">0</span> products
+      <div class="slide" style="background-color: #ECFDF5;">
+        <div class="slide-content">
+          <span class="hero-tag">🥛 Pasture Raised Dairy</span>
+          <h2>Pure & Rich Dairy <br>From Local Farms</h2>
+          <p>Indulge in organic milk, golden ghee, and creamy malai paneer.</p>
+          <a href="#shopContainer" class="hero-cta">Shop Dairy</a>
         </div>
-        <button class="mobile-filter-trigger" id="mobileFilterBtn">
-          <span>⚙️</span> Filter & Refine
-        </button>
+        <div class="slide-image">
+          <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=800&q=80" alt="Fresh Dairy products">
+        </div>
       </div>
-      
-      <div class="products-grid" id="productsGrid">
-        <!-- Products dynamically loaded by JS -->
+    </div>
+    <button class="slider-arrow prev" id="heroPrevBtn">❮</button>
+    <button class="slider-arrow next" id="heroNextBtn">❯</button>
+  </section>
+
+  <!-- Product Categories Section -->
+  <section class="section categories-section" id="categories">
+    <div class="container">
+      <div class="section-header">
+        <h2>Product Categories</h2>
+        <a href="#shopContainer" class="view-all-link">View All Categories ❯</a>
       </div>
-    </section>
-  </div>
+      <div class="categories-grid-cards" id="categoriesGridCards">
+        <!-- Filled Dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Bestseller Product Section -->
+  <section class="section bestseller-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Bestseller Product</h2>
+        <a href="#shopContainer" class="view-all-link">View all products ❯</a>
+      </div>
+      <div class="bestseller-carousel">
+        <button class="carousel-arrow prev" id="bestPrevBtn">❮</button>
+        <div class="bestseller-grid" id="bestsellerGrid">
+          <!-- Loaded Dynamically -->
+        </div>
+        <button class="carousel-arrow next" id="bestNextBtn">❯</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shop Our Collections Section -->
+  <section class="section collections-section">
+    <div class="container collections-grid">
+      <div class="collection-card card-orange" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&w=400&q=80');">
+        <div class="card-content">
+          <h3>Organic Honey with <br>Healthy Ingredients</h3>
+          <a href="#shopContainer" class="card-btn">Shop Now ❯</a>
+        </div>
+      </div>
+      <div class="collection-card card-green" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1610970881699-44a5587caa9a?auto=format&fit=crop&w=400&q=80');">
+        <div class="card-content">
+          <h3>100% Fresh Healthy <br>Fruits & Berries</h3>
+          <a href="#shopContainer" class="card-btn">Shop Now ❯</a>
+        </div>
+      </div>
+      <div class="collection-card card-yellow" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?auto=format&fit=crop&w=400&q=80');">
+        <div class="card-content">
+          <h3>Home Made Natural <br>Fruit Ingredients</h3>
+          <a href="#shopContainer" class="card-btn">Shop Now ❯</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trusted Brands Section -->
+  <section class="brands-section">
+    <div class="container brands-container">
+      <div class="brand-item">🌱 <span>100% Organic</span></div>
+      <div class="brand-item">🚜 <span>Direct Farm Source</span></div>
+      <div class="brand-item">🛡️ <span>Secure Checkout</span></div>
+      <div class="brand-item">🚚 <span>Instant Delivery</span></div>
+      <div class="brand-item">🏅 <span>Premium Quality</span></div>
+      <div class="brand-item">😊 <span>Happy Customers</span></div>
+    </div>
+  </section>
+
+  <!-- Featured Product Section -->
+  <section class="section featured-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Featured Product</h2>
+        <div class="featured-tabs" id="featuredTabs">
+          <button class="featured-tab active" data-category="all">All Products</button>
+          <button class="featured-tab" data-category="produce">Vegetables</button>
+          <button class="featured-tab" data-category="dairy">Dairy</button>
+          <button class="featured-tab" data-category="bakery">Bakery</button>
+        </div>
+      </div>
+      <div class="featured-grid" id="featuredGrid">
+        <!-- Loaded Dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Big Deals Middle Banner -->
+  <section class="middle-banner">
+    <div class="container middle-banner-container">
+      <div class="middle-banner-content">
+        <span class="banner-tag">Save Up To 50% Off</span>
+        <h2>Big Deals Trending Of Week & Fresh Products</h2>
+        <a href="#shopContainer" class="hero-cta">Shop Now</a>
+      </div>
+      <div class="middle-banner-image">
+        <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80" alt="Couple shopping">
+      </div>
+    </div>
+  </section>
+
+  <!-- What Our Customers Say -->
+  <section class="section testimonials-section">
+    <div class="container">
+      <div class="section-header center">
+        <h2>What Our Customers Say</h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="user-info">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80" alt="Laura Johnsen" class="user-avatar">
+            <div>
+              <h4>Laura Johnsen</h4>
+              <span class="rating">★★★★★</span>
+            </div>
+          </div>
+          <p>"The vegetable quality is outstanding. Super fresh, packaged carefully, and always delivered on time. Highly recommended!"</p>
+        </div>
+        <div class="testimonial-card">
+          <div class="user-info">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" alt="Ahmed Khan" class="user-avatar">
+            <div>
+              <h4>Ahmed Khan</h4>
+              <span class="rating">★★★★★</span>
+            </div>
+          </div>
+          <p>"I buy milk, ghee, and local greens weekly. The quality is far better than regular supermarkets. Pure farm-fresh goodness."</p>
+        </div>
+        <div class="testimonial-card">
+          <div class="user-info">
+            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=150&q=80" alt="Irena Petrova" class="user-avatar">
+            <div>
+              <h4>Irena Petrova</h4>
+              <span class="rating">★★★★★</span>
+            </div>
+          </div>
+          <p>"Outstanding customer support! I had a minor issue with my delivery and it was resolved within 10 minutes. Love Farm Fresh!"</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest From Our Blog -->
+  <section class="section blog-section" id="blog">
+    <div class="container">
+      <div class="section-header">
+        <h2>Latest From Our Blog</h2>
+        <a href="#blog" class="view-all-link">View Blog ❯</a>
+      </div>
+      <div class="blog-grid">
+        <article class="blog-card">
+          <div class="blog-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1506084868230-bb9d95c24759?auto=format&fit=crop&w=400&q=80" alt="Seasonal eating">
+          </div>
+          <div class="blog-meta">🌱 Farm Fresh • May 28, 2026</div>
+          <h3>Seasonal Eating: Why It Matters For Your Health</h3>
+          <p>Eating seasonal foods means you get them at the peak of their freshness and nutritional value.</p>
+          <a href="#blog" class="blog-link">Read More ❯</a>
+        </article>
+        <article class="blog-card">
+          <div class="blog-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1610970881699-44a5587caa9a?auto=format&fit=crop&w=400&q=80" alt="Fruit desserts">
+          </div>
+          <div class="blog-meta">💡 Tips • May 26, 2026</div>
+          <h3>5 Simple Fruit Desserts That Require No Baking</h3>
+          <p>Enjoy quick, healthy, and cooling treats made with fresh summer organic berries.</p>
+          <a href="#blog" class="blog-link">Read More ❯</a>
+        </article>
+        <article class="blog-card">
+          <div class="blog-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=400&q=80" alt="Meet the farmers">
+          </div>
+          <div class="blog-meta">🚜 Spotlight • May 25, 2026</div>
+          <h3>Meet The Farmers: The Johnson's Organic Journey</h3>
+          <p>Discover the passion and hard work behind the organic vegetables delivered to your home.</p>
+          <a href="#blog" class="blog-link">Read More ❯</a>
+        </article>
+        <article class="blog-card">
+          <div class="blog-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=400&q=80" alt="Store produce">
+          </div>
+          <div class="blog-meta">💡 Tips • May 24, 2026</div>
+          <h3>How To Properly Store Produce To Maximize Freshness</h3>
+          <p>Learn storage hacks to keep your leafy greens and vegetables fresh twice as long.</p>
+          <a href="#blog" class="blog-link">Read More ❯</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter Signup -->
+  <section class="newsletter-section">
+    <div class="container newsletter-container">
+      <div class="newsletter-content">
+        <h2>Join Our Newsletter</h2>
+        <p>Subscribe to receive weekly farm-fresh recipes, exclusive deals, and organic living tips.</p>
+      </div>
+      <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed to Newsletter successfully!');">
+        <input type="email" placeholder="Your Email Address" required>
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+
 
   <!-- Cart Sidebar Drawer -->
   <div class="cart-drawer-backdrop" id="cartBackdrop">
@@ -184,7 +381,7 @@ $storeDataJson = json_encode($storeData);
     </aside>
   </div>
 
-  <!-- Wishlist Sidebar Drawer -->
+  <!-- Wishlist Drawer -->
   <div class="wishlist-drawer-backdrop" id="wishlistBackdrop">
     <aside class="wishlist-sidebar" id="wishlistSidebar">
       <div class="wishlist-header">
@@ -196,6 +393,42 @@ $storeDataJson = json_encode($storeData);
       </div>
     </aside>
   </div>
+
+  <!-- Redesigned Dark Footer Area -->
+  <footer class="footer footer-dark">
+    <div class="footer-container">
+      <div class="footer-section">
+        <a href="#" class="logo">
+          <span class="logo-emoji">🥬</span>
+          <span class="logo-text" style="color: #22C55E;">Farm Fresh</span>
+        </a>
+        <p class="footer-about">Your premium choice for organic vegetables, dairy, and farm-fresh essentials. Direct from local farms to your home.</p>
+        <div class="footer-socials">
+          <a href="#">📘</a>
+          <a href="#">📷</a>
+          <a href="#">🐦</a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h3>Customer Service</h3>
+        <ul class="footer-links">
+          <li><a href="#profile">My Account</a></li>
+          <li><a href="#tracking">Order Tracking</a></li>
+          <li><a href="#wishlist">Wishlist</a></li>
+          <li><a href="#returns">Returns & Exchanges</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Contact Us</h3>
+        <p class="footer-contact">📞 +123 4567 890</p>
+        <p class="footer-contact">✉️ support@farmfresh.com</p>
+        <p class="footer-contact">📍 Farm Fresh Lane, Green Valley</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <?php echo date('Y'); ?> Farm Fresh. Premium Organic Grocery. All rights reserved.</p>
+    </div>
+  </footer>
 
   <!-- Toast Notification Container -->
   <div class="toast-container" id="toastContainer"></div>

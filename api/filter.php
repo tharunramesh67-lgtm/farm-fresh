@@ -47,8 +47,13 @@ $filtered = array_filter($products, function($p) use ($category, $minPrice, $max
     // Search text match
     if (!empty($search)) {
         $searchString = strtolower($search);
+        $isDairyQuery = (strpos($searchString, 'diary') !== false) || (strpos($searchString, 'dairy') !== false);
+        $isVegetableQuery = (strpos($searchString, 'vegetable') !== false);
         $nameMatch = strpos(strtolower($p['name']), $searchString) !== false;
         $descMatch = strpos(strtolower($p['description']), $searchString) !== false;
+        $categoryMatch = (strpos(strtolower($p['category']), $searchString) !== false) || 
+                          ($isDairyQuery && strcasecmp($p['category'], 'dairy') === 0) ||
+                          ($isVegetableQuery && strcasecmp($p['category'], 'produce') === 0);
         
         $tagMatch = false;
         if (isset($p['tags']) && is_array($p['tags'])) {
@@ -60,7 +65,7 @@ $filtered = array_filter($products, function($p) use ($category, $minPrice, $max
             }
         }
         
-        if (!$nameMatch && !$descMatch && !$tagMatch) {
+        if (!$nameMatch && !$descMatch && !$tagMatch && !$categoryMatch) {
             return false;
         }
     }
