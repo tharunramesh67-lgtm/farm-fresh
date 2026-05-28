@@ -1,0 +1,280 @@
+{
+  "categories": ["All", "Produce", "Dairy", "Pantry", "Beverages", "Frozen", "Bakery"],
+  "products": [
+    {
+      "id": 1,
+      "name": "Organic Roma Tomatoes",
+      "category": "Produce",
+      "description": "Sweet, vine-ripened organic Roma tomatoes, perfect for salads and sauces.",
+      "price": 4.99,
+      "originalPrice": 6.49,
+      "image": "https://images.unsplash.com/photo-1595855759920-86582396756a?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.7,
+      "inStock": true
+    },
+    {
+      "id": 2,
+      "name": "Fresh Hass Avocados",
+      "category": "Produce",
+      "description": "Creamy and rich in flavor, ideal for homemade guacamole or toast.",
+      "price": 5.49,
+      "originalPrice": 6.99,
+      "image": "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.9,
+      "inStock": true
+    },
+    {
+      "id": 3,
+      "name": "Organic Honeycrisp Apples",
+      "category": "Produce",
+      "description": "Crisp, sweet, and slightly tart premium organic apples.",
+      "price": 3.99,
+      "originalPrice": null,
+      "image": "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.5,
+      "inStock": true
+    },
+    {
+      "id": 4,
+      "name": "Fresh Baby Spinach",
+      "category": "Produce",
+      "description": "Pre-washed and ready to eat, tender organic baby spinach leaves.",
+      "price": 2.99,
+      "originalPrice": 3.49,
+      "image": "https://images.unsplash.com/photo-1576045057995-568f588f82fb?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.6,
+      "inStock": true
+    },
+    {
+      "id": 5,
+      "name": "Whole Grass-Fed Milk",
+      "category": "Dairy",
+      "description": "Rich, creamy whole milk from pasture-raised, grass-fed cows.",
+      "price": 4.49,
+      "originalPrice": null,
+      "image": "https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.8,
+      "inStock": true
+    },
+    {
+      "id": 6,
+      "name": "Organic Greek Yogurt",
+      "category": "Dairy",
+      "description": "Thick, strained plain Greek yogurt packed with protein.",
+      "price": 5.29,
+      "originalPrice": 5.99,
+      "image": "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.7,
+      "inStock": true
+    },
+    {
+      "id": 7,
+      "name": "Salted Creamery Butter",
+      "category": "Dairy",
+      "description": "Traditional churned butter made from fresh sweet cream.",
+      "price": 3.89,
+      "originalPrice": 4.29,
+      "image": "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.4,
+      "inStock": true
+    },
+    {
+      "id": 8,
+      "name": "Artisanal Cheddar Cheese",
+      "category": "Dairy",
+      "description": "Sharp cheddar cheese aged for 12 months for an intense, complex taste.",
+      "price": 6.99,
+      "originalPrice": 8.49,
+      "image": "https://images.unsplash.com/photo-1618067424218-c0f5f93427ec?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.9,
+      "inStock": false
+    },
+    {
+      "id": 9,
+      "name": "Organic Extra Virgin Olive Oil",
+      "category": "Pantry",
+      "description": "Cold-pressed, single-origin extra virgin olive oil.",
+      "price": 14.99,
+      "originalPrice": 17.99,
+      "image": "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.8,
+      "inStock": true
+    },
+    {
+      "id": 10,
+      "name": "Gluten-Free Penne Pasta",
+      "category": "Pantry",
+      "description": "Delicious corn and rice blend pasta with authentic al dente texture.",
+      "price": 2.49,
+      "originalPrice": null,
+      "image": "https://images.unsplash.com/photo-1621961404018-819904db2bc2?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.3,
+      "inStock": true
+    },
+    {
+      "id": 11,
+      "name": "Raw Wildflower Honey",
+      "category": "Pantry",
+      "description": "Unfiltered and unpasteurized raw honey harvested from local wildflower fields.",
+      "price": 7.99,
+      "originalPrice": 9.49,
+      "image": "https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.9,
+      "inStock": true
+    },
+    {
+      "id": 12,
+      "name": "Organic Quinoa",
+      "category": "Pantry",
+      "description": "Pre-washed white quinoa grain, high in fiber and essential amino acids.",
+      "price": 5.99,
+      "originalPrice": 6.99,
+      "image": "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.6,
+      "inStock": true
+    },
+    {
+      "id": 13,
+      "name": "Cold Brew Coffee",
+      "category": "Beverages",
+      "description": "Smooth, bold, unsweetened cold brew coffee concentrate.",
+      "price": 6.49,
+      "originalPrice": 7.99,
+      "image": "https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.7,
+      "inStock": true
+    },
+    {
+      "id": 14,
+      "name": "Sparkling Spring Water",
+      "category": "Beverages",
+      "description": "Naturally carbonated mineral water with a refreshing hint of lime.",
+      "price": 1.99,
+      "originalPrice": null,
+      "image": "https://images.unsplash.com/photo-1608885898957-a599fb16ec8d?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.5,
+      "inStock": true
+    },
+    {
+      "id": 15,
+      "name": "Organic Matcha Green Tea",
+      "category": "Beverages",
+      "description": "Ceremonial grade stone-ground green tea powder from Uji, Japan.",
+      "price": 19.99,
+      "originalPrice": 24.99,
+      "image": "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.9,
+      "inStock": true
+    },
+    {
+      "id": 16,
+      "name": "Cold-Pressed Orange Juice",
+      "category": "Beverages",
+      "description": "100% pure squeezed oranges, never from concentrate.",
+      "price": 4.99,
+      "originalPrice": 5.49,
+      "image": "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.8,
+      "inStock": true
+    },
+    {
+      "id": 17,
+      "name": "Frozen Wild Blueberries",
+      "category": "Frozen",
+      "description": "IQF wild blueberries, perfect for smoothies, pancakes, and oatmeal.",
+      "price": 4.79,
+      "originalPrice": null,
+      "image": "https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.6,
+      "inStock": true
+    },
+    {
+      "id": 18,
+      "name": "Frozen Organic Edamame",
+      "category": "Frozen",
+      "description": "Steam-in-bag whole edamame pods, lightly sprinkled with sea salt.",
+      "price": 3.49,
+      "originalPrice": 3.99,
+      "image": "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.4,
+      "inStock": true
+    },
+    {
+      "id": 19,
+      "name": "Premium Vanilla Bean Ice Cream",
+      "category": "Frozen",
+      "description": "Made with double cream and authentic Madagascar vanilla beans.",
+      "price": 5.99,
+      "originalPrice": 6.99,
+      "image": "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.8,
+      "inStock": true
+    },
+    {
+      "id": 20,
+      "name": "Sourdough Bread Boule",
+      "category": "Bakery",
+      "description": "Freshly baked artisan sourdough bread with a crispy crust and chewy interior.",
+      "price": 4.50,
+      "originalPrice": null,
+      "image": "https://images.unsplash.com/photo-1549931319-a545dcf3bc73?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.7,
+      "inStock": true
+    },
+    {
+      "id": 21,
+      "name": "Butter Croissants (4-Pack)",
+      "category": "Bakery",
+      "description": "Flaky, golden, all-butter croissants baked fresh daily.",
+      "price": 5.99,
+      "originalPrice": 6.99,
+      "image": "https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.8,
+      "inStock": true
+    },
+    {
+      "id": 22,
+      "name": "Chocolate Fudge Brownies",
+      "category": "Bakery",
+      "description": "Decadent, rich chocolate brownies topped with premium fudge swirls.",
+      "price": 4.99,
+      "originalPrice": 5.99,
+      "image": "https://images.unsplash.com/photo-1564355808539-22fda35bed7e?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.6,
+      "inStock": false
+    },
+    {
+      "id": 23,
+      "name": "Organic Whole Wheat Bread",
+      "category": "Bakery",
+      "description": "Nutritious whole wheat sliced bread baked with honey and rolled oats.",
+      "price": 3.99,
+      "originalPrice": null,
+      "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.5,
+      "inStock": true
+    },
+    {
+      "id": 24,
+      "name": "Frozen Cauliflower Crust Pizza",
+      "category": "Frozen",
+      "description": "Gluten-free cauliflower crust pizza topped with roasted vegetables.",
+      "price": 8.99,
+      "originalPrice": 9.99,
+      "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.2,
+      "inStock": true
+    },
+    {
+      "id": 25,
+      "name": "Organic Granola & Berries",
+      "category": "Pantry",
+      "description": "Oat-based cluster granola infused with freeze-dried strawberries and blueberries.",
+      "price": 5.49,
+      "originalPrice": null,
+      "image": "https://images.unsplash.com/photo-1517881917430-e70dfb3610aa?auto=format&fit=crop&w=600&q=80",
+      "rating": 4.5,
+      "inStock": true
+    }
+  ]
+}

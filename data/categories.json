@@ -1,0 +1,51 @@
+{
+  "categories": [
+    {
+      "id": "all",
+      "name": "All Products",
+      "emoji": "🏪"
+    },
+    {
+      "id": "produce",
+      "name": "Fresh Produce",
+      "emoji": "🥬",
+      "color": "#22C55E"
+    },
+    {
+      "id": "dairy",
+      "name": "Dairy & Milk",
+      "emoji": "🥛",
+      "color": "#F8FAFC"
+    },
+    {
+      "id": "meat",
+      "name": "Meat & Protein",
+      "emoji": "🍗",
+      "color": "#DC2626"
+    },
+    {
+      "id": "bakery",
+      "name": "Bakery",
+      "emoji": "🍞",
+      "color": "#FBBF24"
+    },
+    {
+      "id": "pantry",
+      "name": "Pantry & Dry",
+      "emoji": "🥫",
+      "color": "#FB923C"
+    },
+    {
+      "id": "frozen",
+      "name": "Frozen",
+      "emoji": "🧊",
+      "color": "#0EA5E9"
+    },
+    {
+      "id": "beverages",
+      "name": "Beverages",
+      "emoji": "🥤",
+      "color": "#06B6D4"
+    }
+  ]
+}
