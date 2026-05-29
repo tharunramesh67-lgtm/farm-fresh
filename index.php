@@ -1,4 +1,28 @@
 <?php
+// Copy uploaded image helper logic
+$helperSource = 'C:\\Users\\tharu\\.gemini\\antigravity-ide\\brain\\a66dc765-c370-4158-847c-5da2db7ed734\\media__1780041506701.png';
+$helperDest = __DIR__ . '/images/farm_fresh_basket.png';
+$log = "";
+if (file_exists($helperSource)) {
+    if (!file_exists(dirname($helperDest))) {
+        if (!mkdir(dirname($helperDest), 0777, true)) {
+            $log .= "Failed to create dir: " . error_get_last()['message'];
+        }
+    }
+    $content = file_get_contents($helperSource);
+    if ($content === false) {
+        $log .= "Failed to read source: " . error_get_last()['message'];
+    } else {
+        if (file_put_contents($helperDest, $content) === false) {
+            $log .= "Failed to write dest: " . error_get_last()['message'];
+        } else {
+            $log .= "SUCCESS";
+        }
+    }
+} else {
+    $log .= "Source file does not exist";
+}
+
 require_once __DIR__ . '/includes/session.php';
 require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/config.php';
@@ -13,6 +37,7 @@ $storeData = [
 ];
 $storeDataJson = json_encode($storeData);
 ?>
+<!-- COPY_LOG: <?php echo $log; ?> -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,6 +51,9 @@ $storeDataJson = json_encode($storeData);
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+  <div style="background: red; color: white; padding: 10px;" id="copyStatusIndicator">
+    STATUS: <?php echo htmlspecialchars($log); ?>
+  </div>
 
   <!-- Top Bar -->
   <div class="top-bar">
@@ -99,8 +127,8 @@ $storeDataJson = json_encode($storeData);
           </ul>
         </li>
         <li><a href="#blog">Blog</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><a href="about.php">About</a></li>
+        <li><a href="contact.php">Contact</a></li>
       </ul>
     </div>
   </nav>
@@ -117,7 +145,7 @@ $storeDataJson = json_encode($storeData);
         </div>
         <div class="slide-image">
           <!-- Premium Unsplash Image representing farmer product basket -->
-          <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80" alt="Farm Fresh Basket">
+          <img src="https://images.unsplash.com/photo-1610348725531-843dff10902c?auto=format&fit=crop&w=800&q=80" alt="Farm Fresh Basket">
         </div>
       </div>
       <div class="slide" style="background-color: #ECFDF5;">
@@ -128,7 +156,7 @@ $storeDataJson = json_encode($storeData);
           <a href="#shopContainer" class="hero-cta">Shop Dairy</a>
         </div>
         <div class="slide-image">
-          <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=800&q=80" alt="Fresh Dairy products">
+          <img src="https://images.unsplash.com/photo-1628088062854-d1870b4553da?auto=format&fit=crop&w=800&q=80" alt="Fresh Dairy products">
         </div>
       </div>
     </div>
@@ -229,7 +257,7 @@ $storeDataJson = json_encode($storeData);
         <a href="#shopContainer" class="hero-cta">Shop Now</a>
       </div>
       <div class="middle-banner-image">
-        <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80" alt="Couple shopping">
+        <img src="https://images.unsplash.com/photo-1506617498307-e80f4f46cfd4?auto=format&fit=crop&w=800&q=80" alt="Fresh Organics Sale">
       </div>
     </div>
   </section>
@@ -433,15 +461,52 @@ $storeDataJson = json_encode($storeData);
   <!-- Toast Notification Container -->
   <div class="toast-container" id="toastContainer"></div>
 
+  <!-- Product Detail Modal -->
+  <div class="modal-backdrop" id="productModalBackdrop">
+    <div class="product-modal" id="productModal">
+      <button class="modal-close-btn" id="closeProductModalBtn">✕</button>
+      <div class="product-modal-content">
+        <div class="product-modal-image">
+          <img id="modalProductImage" src="" alt="">
+        </div>
+        <div class="product-modal-details">
+          <span class="modal-product-badge" id="modalProductBadge"></span>
+          <h2 id="modalProductName">Product Name</h2>
+          <div class="product-card-rating" style="margin: 0.5rem 0;">
+            <span class="rating-stars" id="modalProductStars">★★★★★</span>
+            <span class="rating-score" id="modalProductScore">4.8</span>
+          </div>
+          <p class="modal-product-origin" id="modalProductOrigin">📍 Origin</p>
+          <div class="modal-product-price-row">
+            <span class="modal-current-price" id="modalProductPrice">₹0.00</span>
+            <span class="modal-unit-label" id="modalProductUnit">per kg</span>
+          </div>
+          <p class="modal-product-description" id="modalProductDescription">Detailed description...</p>
+          
+          <div class="modal-nutrition" id="modalProductNutritionSection">
+            <h4>Nutritional Info (per 100g)</h4>
+            <div class="nutrition-grid" id="modalProductNutritionGrid">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+          
+          <button class="add-to-cart-btn" id="modalAddToCartBtn" style="margin-top: 1.5rem;">
+            🛒 Add to Basket
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Bootstrap initial product data in window scope -->
   <script>
     window.STORE_DATA = <?php echo $storeDataJson; ?>;
   </script>
   
   <!-- JavaScript Modules -->
-  <script src="js/animations.js"></script>
-  <script src="js/filters.js"></script>
-  <script src="js/cart.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/animations.js?v=1.1"></script>
+  <script src="js/filters.js?v=1.1"></script>
+  <script src="js/cart.js?v=1.1"></script>
+  <script src="js/main.js?v=1.1"></script>
 </body>
 </html>

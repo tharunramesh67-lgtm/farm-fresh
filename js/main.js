@@ -230,6 +230,15 @@ const FreshMarketApp = {
       window.CartManager.toggleWishlist(product.id, e.target);
     });
 
+    card.querySelector('img').style.cursor = 'pointer';
+    card.querySelector('img').addEventListener('click', () => {
+      this.showProductModal(product);
+    });
+    card.querySelector('.product-card-name').style.cursor = 'pointer';
+    card.querySelector('.product-card-name').addEventListener('click', () => {
+      this.showProductModal(product);
+    });
+
     return card;
   },
 
@@ -284,6 +293,62 @@ const FreshMarketApp = {
 
   updateProductList(filteredProducts) {
     this.renderFeaturedProducts('all');
+  },
+
+  showProductModal(product) {
+    const backdrop = document.getElementById('productModalBackdrop');
+    if (!backdrop) return;
+
+    document.getElementById('modalProductImage').src = product.image;
+    document.getElementById('modalProductImage').alt = product.image_alt || product.name;
+    document.getElementById('modalProductName').textContent = product.name;
+    document.getElementById('modalProductScore').textContent = product.rating;
+    document.getElementById('modalProductStars').textContent = '★'.repeat(Math.floor(product.rating)) + '☆'.repeat(5 - Math.floor(product.rating));
+    document.getElementById('modalProductOrigin').textContent = `📍 ${product.origin || 'Local Farm'}`;
+    document.getElementById('modalProductPrice').textContent = `₹${product.price.toFixed(2)}`;
+    document.getElementById('modalProductUnit').textContent = product.unit || '';
+    document.getElementById('modalProductDescription').textContent = product.longDescription || product.description;
+
+    const badge = document.getElementById('modalProductBadge');
+    if (product.organic) {
+      badge.textContent = '🌱 Organic Certified';
+      badge.style.display = 'inline-block';
+    } else {
+      badge.style.display = 'none';
+    }
+
+    const grid = document.getElementById('modalProductNutritionGrid');
+    const section = document.getElementById('modalProductNutritionSection');
+    grid.innerHTML = '';
+    if (product.nutrition) {
+      section.style.display = 'block';
+      for (const [key, val] of Object.entries(product.nutrition)) {
+        const item = document.createElement('div');
+        item.className = 'nutrition-item';
+        item.innerHTML = `<span>${key.charAt(0).toUpperCase() + key.slice(1)}</span><strong>${val}</strong>`;
+        grid.appendChild(item);
+      }
+    } else {
+      section.style.display = 'none';
+    }
+
+    const addBtn = document.getElementById('modalAddToCartBtn');
+    // Remove old event listener
+    const newBtn = addBtn.cloneNode(true);
+    addBtn.parentNode.replaceChild(newBtn, addBtn);
+    newBtn.disabled = !product.inStock;
+    newBtn.addEventListener('click', (e) => {
+      window.CartManager.addToCart(product.id, 1, e.target);
+    });
+
+    backdrop.classList.add('active');
+    
+    // Bind close
+    const closeBtn = document.getElementById('closeProductModalBtn');
+    closeBtn.onclick = () => backdrop.classList.remove('active');
+    backdrop.onclick = (e) => {
+      if (e.target === backdrop) backdrop.classList.remove('active');
+    };
   }
 };
 

@@ -34,17 +34,23 @@ const ProductFilters = {
       // Press Enter to search immediately
       this.searchInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
+          e.preventDefault();
           clearTimeout(searchTimeout);
           this.state.search = this.searchInput.value.trim();
           this.applyFilters();
+          const grid = document.getElementById('featuredGrid');
+          if (grid) grid.scrollIntoView({ behavior: 'smooth' });
         }
       });
     }
 
     if (this.searchBtn) {
-      this.searchBtn.addEventListener('click', () => {
+      this.searchBtn.addEventListener('click', (e) => {
+        e.preventDefault();
         if (this.searchInput) this.state.search = this.searchInput.value.trim();
         this.applyFilters();
+        const grid = document.getElementById('featuredGrid');
+        if (grid) grid.scrollIntoView({ behavior: 'smooth' });
       });
     }
 
@@ -103,44 +109,28 @@ const ProductFilters = {
     });
 
     try {
-      let filteredProducts = null;
-
-      // 1. Try to fetch from the server if running over HTTP/HTTPS
-      if (window.location.protocol.startsWith('http')) {
-        try {
-          const response = await fetch(`api/filter.php?${queryParams.toString()}`);
-          if (response.ok) {
-            filteredProducts = await response.json();
-          }
-        } catch (err) {
-          console.warn("API filtering failed, falling back to client-side filtering:", err);
+      // Perform client-side filtering directly for instant, resilient search
+      const allProducts = window.FreshMarketApp ? window.FreshMarketApp.products : [];
+      const filteredProducts = allProducts.filter(p => {
+        // Category match
+        if (this.state.category !== 'all' && p.category.toLowerCase() !== this.state.category.toLowerCase()) {
+          return false;
         }
-      }
-
-      // 2. Client-side filtering fallback (highly robust for static setups)
-      if (!filteredProducts) {
-        const allProducts = window.FreshMarketApp ? window.FreshMarketApp.products : [];
-        filteredProducts = allProducts.filter(p => {
-          // Category match
-          if (this.state.category !== 'all' && p.category.toLowerCase() !== this.state.category.toLowerCase()) {
-            return false;
-          }
-          // Search match
-          if (this.state.search) {
-            const query = this.state.search.toLowerCase();
-            const isDairyQuery = query.includes('diary') || query.includes('dairy');
-            const isVegetableQuery = query.includes('vegetable');
-            const nameMatch = p.name.toLowerCase().includes(query);
-            const descMatch = p.description.toLowerCase().includes(query);
-            const tagMatch = p.tags && p.tags.some(t => t.toLowerCase().includes(query));
-            const categoryMatch = p.category.toLowerCase().includes(query) || 
-                                  (isDairyQuery && p.category.toLowerCase() === 'dairy') ||
-                                  (isVegetableQuery && p.category.toLowerCase() === 'produce');
-            if (!nameMatch && !descMatch && !tagMatch && !categoryMatch) return false;
-          }
-          return true;
-        });
-      }
+        // Search match
+        if (this.state.search) {
+          const query = this.state.search.toLowerCase();
+          const isDairyQuery = query.includes('diary') || query.includes('dairy');
+          const isVegetableQuery = query.includes('vegetable');
+          const nameMatch = p.name.toLowerCase().includes(query);
+          const descMatch = p.description.toLowerCase().includes(query);
+          const tagMatch = p.tags && p.tags.some(t => t.toLowerCase().includes(query));
+          const categoryMatch = p.category.toLowerCase().includes(query) || 
+                                (isDairyQuery && p.category.toLowerCase() === 'dairy') ||
+                                (isVegetableQuery && p.category.toLowerCase() === 'produce');
+          if (!nameMatch && !descMatch && !tagMatch && !categoryMatch) return false;
+        }
+        return true;
+      });
 
       // Update heading dynamically
       const heading = document.querySelector('.featured-section h2');

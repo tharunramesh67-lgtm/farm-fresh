@@ -146,17 +146,23 @@ const FarmFreshApp = {
       // Press Enter to search immediately
       this.searchInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
+          e.preventDefault();
           clearTimeout(searchTimeout);
           state.filters.search = this.searchInput.value.trim().toLowerCase();
           this.applyFilters();
+          const grid = document.getElementById('featuredGrid');
+          if (grid) grid.scrollIntoView({ behavior: 'smooth' });
         }
       });
     }
 
     if (this.searchBtn) {
-      this.searchBtn.addEventListener('click', () => {
+      this.searchBtn.addEventListener('click', (e) => {
+        e.preventDefault();
         if (this.searchInput) state.filters.search = this.searchInput.value.trim().toLowerCase();
         this.applyFilters();
+        const grid = document.getElementById('featuredGrid');
+        if (grid) grid.scrollIntoView({ behavior: 'smooth' });
       });
     }
 
@@ -374,6 +380,15 @@ const FarmFreshApp = {
 
     card.querySelector('.fav-btn').addEventListener('click', (e) => {
       this.toggleWishlist(product.id, e.currentTarget);
+    });
+
+    card.querySelector('img').style.cursor = 'pointer';
+    card.querySelector('img').addEventListener('click', () => {
+      this.showProductModal(product);
+    });
+    card.querySelector('.product-card-name').style.cursor = 'pointer';
+    card.querySelector('.product-card-name').addEventListener('click', () => {
+      this.showProductModal(product);
     });
 
     return card;
@@ -743,6 +758,62 @@ const FarmFreshApp = {
         state.wishlist = [];
       }
     }
+  },
+
+  showProductModal(product) {
+    const backdrop = document.getElementById('productModalBackdrop');
+    if (!backdrop) return;
+
+    document.getElementById('modalProductImage').src = product.image;
+    document.getElementById('modalProductImage').alt = product.image_alt || product.name;
+    document.getElementById('modalProductName').textContent = product.name;
+    document.getElementById('modalProductScore').textContent = product.rating;
+    document.getElementById('modalProductStars').textContent = '★'.repeat(Math.floor(product.rating)) + '☆'.repeat(5 - Math.floor(product.rating));
+    document.getElementById('modalProductOrigin').textContent = `📍 ${product.origin || 'Local Farm'}`;
+    document.getElementById('modalProductPrice').textContent = `₹${product.price.toFixed(2)}`;
+    document.getElementById('modalProductUnit').textContent = product.unit || 'per unit';
+    document.getElementById('modalProductDescription').textContent = product.description;
+
+    const badge = document.getElementById('modalProductBadge');
+    if (product.organic) {
+      badge.textContent = '🌱 Organic Certified';
+      badge.style.display = 'inline-block';
+    } else {
+      badge.style.display = 'none';
+    }
+
+    const grid = document.getElementById('modalProductNutritionGrid');
+    const section = document.getElementById('modalProductNutritionSection');
+    grid.innerHTML = '';
+    if (product.nutrition) {
+      section.style.display = 'block';
+      for (const [key, val] of Object.entries(product.nutrition)) {
+        const item = document.createElement('div');
+        item.className = 'nutrition-item';
+        item.innerHTML = `<span>${key.charAt(0).toUpperCase() + key.slice(1)}</span><strong>${val}</strong>`;
+        grid.appendChild(item);
+      }
+    } else {
+      section.style.display = 'none';
+    }
+
+    const addBtn = document.getElementById('modalAddToCartBtn');
+    // Remove old event listener
+    const newBtn = addBtn.cloneNode(true);
+    addBtn.parentNode.replaceChild(newBtn, addBtn);
+    newBtn.disabled = !product.inStock;
+    newBtn.addEventListener('click', (e) => {
+      this.addToCart(product.id, 1);
+    });
+
+    backdrop.classList.add('active');
+    
+    // Bind close
+    const closeBtn = document.getElementById('closeProductModalBtn');
+    closeBtn.onclick = () => backdrop.classList.remove('active');
+    backdrop.onclick = (e) => {
+      if (e.target === backdrop) backdrop.classList.remove('active');
+    };
   }
 };
 
